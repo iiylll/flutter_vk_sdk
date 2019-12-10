@@ -39,7 +39,6 @@ private enum Result {
 }
 
 public class SwiftVkSdkPlugin: NSObject, FlutterPlugin {
-    private typealias UIApplicationOpenURLOptionsKey = UIApplication.OpenURLOptionsKey
     private typealias VKWakeUpCompletion = (VKAuthorizationState, Error?) -> Void
 
     private var eventSink: FlutterEventSink?
@@ -62,10 +61,11 @@ public class SwiftVkSdkPlugin: NSObject, FlutterPlugin {
         return true
     }
 
-    // iOS 9 workflow
-    public func application(_: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+    // iOS 9 deprecated
+    // iOS 12 workflow
+    public func application(_: UIApplication, open url: URL, options: [UIApplicationOpen.URLOptionsKey: Any] = [:]) -> Bool {
         if #available(iOS 9.0, *) {
-            VKSdk.processOpen(url, fromApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String)
+            VKSdk.processOpen(url, fromApplication: options[UIApplicationOpen.URLOptionsKey.sourceApplication] as? String)
             return true
         }
 
