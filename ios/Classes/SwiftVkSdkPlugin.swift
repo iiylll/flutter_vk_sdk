@@ -39,6 +39,7 @@ private enum Result {
 }
 
 public class SwiftVkSdkPlugin: NSObject, FlutterPlugin {
+    private typealias UIApplicationOpenURLOptionsKey = UIApplication.OpenURLOptionsKey
     private typealias VKWakeUpCompletion = (VKAuthorizationState, Error?) -> Void
 
     private var eventSink: FlutterEventSink?
