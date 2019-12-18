@@ -40,6 +40,7 @@ private enum Result {
 
 public class SwiftVkSdkPlugin: NSObject, FlutterPlugin {
     private typealias VKWakeUpCompletion = (VKAuthorizationState, Error?) -> Void
+    public typealias UIApplicationOpenURLOptionsKey = UIApplication.OpenURLOptionsKey
 
     private var eventSink: FlutterEventSink?
 
@@ -63,14 +64,19 @@ public class SwiftVkSdkPlugin: NSObject, FlutterPlugin {
 
     // iOS 9 deprecated
     // iOS 12 workflow
-    public func application(_: UIApplication, open url: URL, options: [UIApplicationOpen.URLOptionsKey: Any] = [:]) -> Bool {
+    public func application(_: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+        if #available(iOS 12.0, *) {
+            VKSdk.processOpen(url, fromApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String)
+            return true
+        }
         if #available(iOS 9.0, *) {
-            VKSdk.processOpen(url, fromApplication: options[UIApplicationOpen.URLOptionsKey.sourceApplication] as? String)
+            VKSdk.processOpen(url, fromApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String)
             return true
         }
 
         return false
     }
+
 
     public func handle(_ input: FlutterMethodCall, result output: @escaping FlutterResult) {
         guard let methodName = MethodName(rawValue: input.method) else {
